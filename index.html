@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input  type="text" placeholder="Search for location "  >
+           <button> <i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="error">
+            <p>Invalid city Name</p>
+        </div>
+    
+        <div class="weather">
+            <img src="sun image rain.jpg" class ="weather-icon">
+            <h1 class="temp">22°c</h1>
+            <h2 class="city">New York</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="https://th.bing.com/th/id/OIP.Y3wQhrzc1oFTqAVTRCjIfQHaHa?pid=ImgDet&w=168&h=168&c=7&dpr=1.3">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <img src="https://th.bing.com/th/id/OIP.XpjDNnR7Z5R4clFaH5q1PgHaHa?pid=ImgDet&w=168&h=168.32876712328766&c=7&dpr=1.3">
+                    <div>
+                        <p class="wind">15</p>
+                        <p>Wind speed</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const apiKey = "1ac802097646cc8256d29ef781b61aff";
+        const apiUrl ="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+         const searchBox =document.querySelector(".search input");
+         const searchBtn =document.querySelector(".search button");
+         const weatherIcon=document.querySelector(".weather-icon")
+
+
+
+
+
+        async function checkWeather(city){
+            const response =await fetch(apiUrl +city+ `&appid=${apiKey}`);
+            var data = await response.json();
+
+            //console.log(data);
+
+
+            document.querySelector(".city").innerHTML=data.name;
+            document.querySelector(".temp").innerHTML= Math.round(data.main.temp) +"°c";
+            document.querySelector(".humidity").innerHTML=data.main.humidity +"%";
+            document.querySelector(".wind").innerHTML=data.wind.speed +"km/h";
+            
+            if (data.weather[0].main == "Clouds"){
+                weatherIcon.src="https://th.bing.com/th/id/OIP.uRZSjGTIbH1soioXaQhl2gHaHa?pid=ImgDet&w=131&h=131&c=7&dpr=1.3";
+
+            }
+            else if(data.weather[0].main == "Clear"){
+                weatherIcon.src="https://th.bing.com/th/id/OIP.u8_-l9PymFOa-ByWxfW4PgAAAA?pid=ImgDet&w=131&h=131&c=7&dpr=1.3";
+            }
+            else if(data.weather[0].main == "Rain"){
+                weatherIcon.src="https://th.bing.com/th/id/OIP.OpVnOHpMyTmPvTAMgE0uwgHaHa?pid=ImgDet&w=131&h=131&c=7&dpr=1.3";
+            }
+            else if(data.weather[0].main == "Drizzle"){
+                weatherIcon.src="https://png.pngtree.com/png-vector/20220527/ourlarge/pngtree-sun-with-clouds-and-rain-png-image_4757344.png";
+            }
+            else if(data.weather[0].main == "Mist"){
+                weatherIcon.src="https://th.bing.com/th/id/OIP.yY1gZp8lcmRC-6PwI6eGQwHaHa?pid=ImgDet&w=131&h=131&c=7&dpr=1.3";
+            }
+            
+            document.querySelector(".weather").style.display ="block";
+
+            
+
+        }
+
+        searchBtn.addEventListener("click",()=>{
+            checkWeather(searchBox.value);
+        })
+
+
+
+    </script>
+    
+</body>
+</html>
